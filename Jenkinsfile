@@ -8,19 +8,21 @@ node {
 
     tag = readFile('commit-id').replace("\n", "").replace("\r", "")
     appName = "hello-kenzan"
-    registryHost = "127.0.0.1:30912/"
+    registryHost = "127.0.0.1:30400/"
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
+    env.BUILD_TAG=tag
 
     stage "Build"
     
-        sh "docker build -t ${imageName} ."
+        sh "docker build -t ${imageName} -f . applications/hello-kenzan"
     
     stage "Push"
 
         sh "docker push ${imageName}"
 
     stage "Deploy"
-        sh 'kubectl apply -f k8s/*.yaml'
-        // sh "sed 's#__IMAGE__#'$BUILDIMG'#' part1/hello-kenzan/k8s/deployment.yaml | kubectl apply -f -"
+    
+        kubernetesDeploy configs: "k8s/deployment.yaml", kubeconfigId: 'kubeconfig'
+
 }
