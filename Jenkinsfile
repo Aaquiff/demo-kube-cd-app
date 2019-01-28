@@ -12,9 +12,6 @@ node {
     REGISTRY_URL = "127.0.0.1:30500"
     APP_NAME = "hello-kenzan"
     IMAGE_NAME = "${REGISTRY_URL}/${APP_NAME}:${TAG}"
-    
-    stage "checkout"
-        git(url: 'https://github.com/Aaquiff/demo-kube-cd-app', branch: 'master')
       
     stage "docker build"
         sh """
