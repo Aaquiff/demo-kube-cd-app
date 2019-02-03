@@ -32,9 +32,9 @@ spec:
     node(label) {
         stage('Build and Push docker image') {
             container('docker') {
-                git 'https://github.com/Aaquiff/demo-kube-cd-app'
-                def customImage = docker.build("${IMAGE}")
-                customImage.push()
+              git branch: 'master', url: 'https://github.com/Aaquiff/demo-kube-cd-app'
+              def customImage = docker.build("${IMAGE}")
+              customImage.push()
             }
         }
     }
