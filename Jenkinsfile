@@ -20,7 +20,6 @@ spec:
   ) {
     node(label) {
         stage('Build and Push docker image') {
-            container('docker') {
               git 'https://github.com/Aaquiff/demo-kube-cd-app'
               
               sh "git rev-parse --short HEAD > commit-id"
@@ -31,7 +30,7 @@ spec:
               REGISTRY_HOST_IP = "10.3.243.107"
               REGISTRY_URL = "${REGISTRY_HOST_IP}:5000"
               IMAGE = "${REGISTRY_URL}/${APP_NAME}:${TAG}"
-
+            container('docker') {
               def customImage = docker.build("${IMAGE}")
               customImage.push()
             }
