@@ -21,7 +21,7 @@ spec:
     node(label) {
         stage('Build and Push docker image') {
             container('docker') {
-              git branch: 'master', url: 'https://github.com/Aaquiff/demo-kube-cd-app'
+              git 'https://github.com/Aaquiff/demo-kube-cd-app'
               
               sh "git rev-parse --short HEAD > commit-id"
               TAG = readFile('commit-id').replace("\n", "").replace("\r", "")
