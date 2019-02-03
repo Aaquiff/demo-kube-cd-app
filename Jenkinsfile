@@ -35,7 +35,7 @@ spec:
             }
         }
       stage('Deploy K8s') {
-         kubernetesDeploy configs: "k8s/deployment.yaml"
+         kubernetesDeploy configs: "k8s/deployment.yaml", kubeconfigId: 'kubeconfig'
       }
     }
 }
