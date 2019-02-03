@@ -1,31 +1,42 @@
-node {
+def label = "docker-${UUID.randomUUID().toString()}"
 
+podTemplate(label: label, yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: docker
+    image: docker:1.11
+    command: ['cat']
+    tty: true
+    volumeMounts:
+    - name: dockersock
+      mountPath: /var/run/docker.sock
+  volumes:
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+"""
+  ) {
     checkout scm
 
-    env.DOCKER_API_VERSION="1.23"
-    
     sh "git rev-parse --short HEAD > commit-id"
     TAG = readFile('commit-id').replace("\n", "").replace("\r", "")
     
-    HOST = env.REGISTRY_SERVICE_HOST
-    PORT = env.REGISTRY_SERVICE_PORT
-    REGISTRY_URL = "127.0.0.1:30500"
     APP_NAME = "hello-kenzan"
-    IMAGE_NAME = "${REGISTRY_URL}/${APP_NAME}:${TAG}"
-      
-    stage "docker build"
-        sh """
-        docker run -d -e 'REG_IP=${HOST}' -e 'REG_PORT=${PORT}' --name socat-registry -p 30500:5000 aaquiff/socat:1.0
-        
-        docker build -t ${IMAGE_NAME} .
-        docker push ${IMAGE_NAME}
-        
-        docker stop socat-registry; docker rm socat-registry
-        """
-    stage "deploy k8s"
-        
-        sh """
-        sed 's|<IMAGE_NAME>|${IMAGE_NAME}|' -i k8s/deployment.yaml
-        kubectl apply -f k8s/deployment.yaml
-        """
+    //REGISTRY_HOST = "viable-zebra-docker-registry.registry.svc.cluster.local"
+    REGISTRY_HOST_IP = "10.3.243.107"
+    REGISTRY_URL = "${REGISTRY_HOST_IP}:5000"
+    IMAGE = "${REGISTRY_URL}/${APP_NAME}:${TAG}"
+    
+    node(label) {
+        stage('Build and Push docker image') {
+            //git 'https://github.com/Aaquiff/demo-kube-cd-app'
+
+            container('docker') {
+                def customImage = docker.build("${image}")
+                customImage.push()
+            }
+        }
+    }
 }
