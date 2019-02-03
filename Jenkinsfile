@@ -16,8 +16,7 @@ spec:
   - name: dockersock
     hostPath:
       path: /var/run/docker.sock
-"""
-  ) {
+""") {
     node(label) {
         stage('Build and Push docker image') {
               git 'https://github.com/Aaquiff/demo-kube-cd-app'
@@ -35,5 +34,8 @@ spec:
               customImage.push()
             }
         }
+      stage('Deploy K8s') {
+         kubernetesDeploy configs: "k8s/deployment.yaml"
+      }
     }
 }
