@@ -10,7 +10,7 @@ node {
           IMAGE = "${REGISTRY_SERVER}/${APP_NAME}:${TAG}"
           
           sh """
-            docker build -t ${IMAGE} .
+            docker build -t ${IMAGE} ./
             docker push ${IMAGE}
           """
     }
