@@ -6,11 +6,13 @@ node {
           TAG = readFile('commit-id').replace("\n", "").replace("\r", "")
 
           APP_NAME = "hello-kenzan"
+          REGISTRY_SERVER="${env.REGISTRY_USERNAME}"
+            REGISTRY_SERVER = REGISTRY_SERVER.trim()
           IMAGE = "${APP_NAME}:${TAG}"
           
           sh """
-            docker build -t \$REGISTRY_USERNAME/${IMAGE} ./
-            docker push \$REGISTRY_USERNAME/${IMAGE}
+            docker build -t ${IMAGE} ./
+            docker push ${IMAGE}
           """
     }
 }
