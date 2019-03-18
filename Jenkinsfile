@@ -6,7 +6,7 @@ node {
           TAG = readFile('commit-id').replace("\n", "").replace("\r", "")
 
           APP_NAME = "hello-kenzan"
-          REGISTRY_SERVER = ${env.REGISTRY_USERNAME}
+          REGISTRY_SERVER = "${env.REGISTRY_USERNAME}"
           IMAGE = "{APP_NAME}:${TAG}"
           
           sh """
