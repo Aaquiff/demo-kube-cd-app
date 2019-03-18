@@ -7,7 +7,7 @@ node {
 
           APP_NAME = "hello-kenzan"
           REGISTRY_SERVER = "${env.REGISTRY_USERNAME}"
-          IMAGE = "{APP_NAME}:${TAG}"
+          IMAGE = "${REGISTRY_SERVER}/${APP_NAME}:${TAG}"
           
           sh """
             docker build -t ${IMAGE} ./
