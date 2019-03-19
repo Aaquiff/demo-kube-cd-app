@@ -30,7 +30,7 @@ spec:
         tier: hello-kenzan
     spec:
       containers:
-      - image: <IMAGE_NAME>
+      - image: aaquiff/hello-kenzan
         name: hello-kenzan
         ports:
         - containerPort: 80
