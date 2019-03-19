@@ -37,4 +37,5 @@ spec:
           name: hello-kenzan
       imagePullSecrets:
       - name: registry-credentials
-
+      
+      
