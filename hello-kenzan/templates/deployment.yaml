@@ -35,3 +35,5 @@ spec:
         ports:
         - containerPort: 80
           name: hello-kenzan
+      imagePullSecrets:
+      - name: registry-credentials
