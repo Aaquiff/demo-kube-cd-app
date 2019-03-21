@@ -38,3 +38,5 @@ spec:
       imagePullSecrets:
       - name: registry-credentials
 
+
+
